@@ -96,3 +96,9 @@ oss-radar/
 | GET | `/api/dashboard/summary` | Dashboard stats |
 | GET | `/api/profile` | User profile |
 | PATCH | `/api/profile/preferences` | Update preferences |
+
+
+## Support
+
+If you like Polaris, consider giving the repository a ⭐
+It helps the project grow!
