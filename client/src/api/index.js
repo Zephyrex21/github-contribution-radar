@@ -1,0 +1,28 @@
+import api from './axiosInstance';
+
+export const issuesApi = {
+  search:    params => api.get('/api/issues/search', { params }).then(r => r.data),
+  getDetail: (owner, repo, num) => api.get(`/api/issues/${owner}/${repo}/${num}`).then(r => r.data),
+};
+
+export const reposApi = {
+  search: params => api.get('/api/repos/search', { params }).then(r => r.data),
+};
+
+export const savedItemsApi = {
+  getAll:  params => api.get('/api/saved-items', { params }).then(r => r.data),
+  save:    body   => api.post('/api/saved-items', body).then(r => r.data),
+  update:  (id, body) => api.patch(`/api/saved-items/${id}`, body).then(r => r.data),
+  remove:  id => api.delete(`/api/saved-items/${id}`).then(r => r.data),
+};
+
+export const dashboardApi = {
+  getSummary: () => api.get('/api/dashboard/summary').then(r => r.data),
+  getHeatmap: () => api.get('/api/dashboard/heatmap').then(r => r.data),
+  getActivity:() => api.get('/api/dashboard/activity').then(r => r.data),
+};
+
+export const profileApi = {
+  get:               () => api.get('/api/profile').then(r => r.data),
+  updatePreferences: body => api.patch('/api/profile/preferences', body).then(r => r.data),
+};
