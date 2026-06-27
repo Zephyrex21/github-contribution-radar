@@ -34,6 +34,12 @@ app.use('/api/saved-items', savedItemsRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
+app.get("/", (req,res)=>{
+    res.json({
+        message:"Polaris Backend API is running 🚀"
+    })
+})
+
 // Global error handler (must be last)
 app.use(errorHandler);
 
