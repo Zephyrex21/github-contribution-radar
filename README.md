@@ -104,4 +104,4 @@ oss-radar/
 ## Support
 
 If you like Polaris, consider giving the repository a ⭐
-It helps the project grow!
+It helps the project grow!.
