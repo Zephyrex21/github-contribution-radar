@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Github, Telescope, BookmarkCheck, BarChart2, Zap, GitMerge, Search, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { PolarisWordmark, PolarisIcon } from '../components/ui/Logo';
+import { ForgeWordmark } from '../components/ui/Logo';
 
 export default function Landing() {
   const { isAuthenticated, user } = useAuth();
@@ -31,7 +31,7 @@ export default function Landing() {
       <div className="relative max-w-5xl mx-auto px-6">
         {/* Nav */}
         <header className="flex items-center justify-between py-6">
-          <PolarisWordmark size={30} />
+          <ForgeWordmark size={30} />
           <div className="flex items-center gap-2">
             <button
               onClick={toggle}
@@ -76,7 +76,7 @@ export default function Landing() {
             }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-apple-blue animate-pulse-slow" />
-            Open-source contribution discovery, reimagined
+            Open-source contribution discovery · Reimagined
           </div>
 
           <h1 className="text-6xl font-bold tracking-tight leading-tight mb-5">
@@ -85,7 +85,7 @@ export default function Landing() {
           </h1>
 
           <p className="text-lg max-w-xl mx-auto mb-12 leading-relaxed" style={{ color: 'var(--c-text-2)' }}>
-            Polaris discovers issues that match your exact stack, scores them by fit,
+            Forge discovers issues that match your exact stack, scores them by fit,
             and tracks every opportunity from first look to merged PR.
           </p>
 
@@ -155,7 +155,7 @@ export default function Landing() {
             { icon: BarChart2,     color: 'text-apple-green',  bg: 'bg-apple-green/10',  title: 'Progress Dashboard', desc: 'Activity heatmap, streak counter, and status breakdown. See your contribution momentum clearly.' },
             { icon: Zap,           color: 'text-apple-orange', bg: 'bg-apple-orange/10', title: 'For You Feed',        desc: 'Personalized issue feed auto-generated from your language preferences. No manual searching.' },
             { icon: GitMerge,      color: 'text-apple-teal',   bg: 'bg-apple-teal/10',   title: 'Trending Now',        desc: 'Live trending repos with beginner-friendly issues, refreshed every session.' },
-            { icon: Search,        color: 'text-apple-pink',   bg: 'bg-apple-pink/10',   title: '⌘K Command Palette', desc: 'Navigate, search, and jump to any part of Polaris instantly with the keyboard.' },
+            { icon: Search,        color: 'text-apple-pink',   bg: 'bg-apple-pink/10',   title: '⌘K Command Palette', desc: 'Navigate, search, and jump to any part of Forge instantly with the keyboard.' },
           ].map(f => (
             <div
               key={f.title}
@@ -173,10 +173,10 @@ export default function Landing() {
         {/* Footer */}
         <div className="border-t pb-8 pt-6 text-center" style={{ borderColor: 'var(--c-sep)' }}>
           <div className="flex items-center justify-center gap-2 mb-2">
-            <PolarisWordmark size={22} />
+            <ForgeWordmark size={22} />
           </div>
           <p className="text-xs" style={{ color: 'var(--c-text-4)' }}>
-            Your guide to open source
+            Build your open-source presence
           </p>
         </div>
       </div>

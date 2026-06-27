@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Polaris — Your guide to open source</title>
-    <meta name="description" content="Discover, score, and track open-source contribution opportunities. Polaris guides you to the right issue, faster." />
+    <title>Forge — Build your open-source presence</title>
+    <meta name="description" content="Discover, score, and track open-source contribution opportunities. Forge helps you find the right issue and ship your first PR." />
+    <!-- Prevent flash of wrong theme before React hydrates -->
+    <script>
+      (function() {
+        var t = localStorage.getItem('forge_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />

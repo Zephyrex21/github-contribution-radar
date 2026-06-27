@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { PolarisWordmark } from '../components/ui/Logo';
+import { ForgeWordmark } from '../components/ui/Logo';
 
 export default function AuthCallback() {
   const { login } = useAuth();
@@ -35,7 +35,7 @@ export default function AuthCallback() {
       className="min-h-screen flex flex-col items-center justify-center gap-6"
       style={{ backgroundColor: 'var(--c-bg)' }}
     >
-      <PolarisWordmark size={32} />
+      <ForgeWordmark size={32} />
       <div className="flex items-center gap-1.5">
         {[0, 150, 300].map(delay => (
           <div

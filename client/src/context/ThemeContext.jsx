@@ -3,13 +3,14 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() => localStorage.getItem('polaris_theme') || 'dark');
+  const [theme, setTheme] = useState(() => localStorage.getItem('forge_theme') || 'dark');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('polaris_theme', theme);
+    localStorage.setItem('forge_theme', theme);
   }, [theme]);
 
+  // toggle: dark ↔ light
   const toggle = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
 
   return (

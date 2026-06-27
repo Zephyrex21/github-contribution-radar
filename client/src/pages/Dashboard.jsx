@@ -4,7 +4,7 @@ import StatCard from '../components/dashboard/StatCard';
 import StatusPieChart from '../components/dashboard/StatusPieChart';
 import RecentActivity from '../components/dashboard/RecentActivity';
 import Heatmap from '../components/dashboard/Heatmap';
-import { SkeletonCard, ErrorMessage, PageHeader } from '../components/ui/index';
+import { ErrorMessage, PageHeader } from '../components/ui/index';
 import { dashboardApi } from '../api/index';
 import { useAuth } from '../context/AuthContext';
 

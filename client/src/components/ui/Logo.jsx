@@ -1,9 +1,9 @@
 /**
- * Polaris Logo — 4-pointed north star mark
- * Usage: <PolarisLogo size={32} /> or <PolarisWordmark />
+ * Forge Logo — stylized forge-spark mark
+ * Exports: ForgeIcon, ForgeWordmark
  */
 
-export function PolarisIcon({ size = 32, className = '' }) {
+export function ForgeIcon({ size = 32, className = '' }) {
   return (
     <svg
       width={size}
@@ -14,36 +14,29 @@ export function PolarisIcon({ size = 32, className = '' }) {
       className={className}
     >
       <defs>
-        <linearGradient id="polaris-grad" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#3b9eff" />
+        <linearGradient id="forge-grad" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#ff9f3a" />
+          <stop offset="60%" stopColor="#f97316" />
           <stop offset="100%" stopColor="#0a84ff" />
         </linearGradient>
-        <filter id="polaris-glow" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="1.5" result="blur" />
+        <filter id="forge-glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="1.2" result="blur" />
           <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
       </defs>
 
-      {/* 4-pointed north star — smooth bezier shape */}
-      <path
-        d="M18 2 C21 9 27 15 34 18 C27 21 21 27 18 34 C15 27 9 21 2 18 C9 15 15 9 18 2Z"
-        fill="url(#polaris-grad)"
-        filter="url(#polaris-glow)"
-      />
+      {/* Bold F lettermark, slightly stylized */}
+      <rect x="8" y="6" width="5" height="24" rx="2.5" fill="url(#forge-grad)" filter="url(#forge-glow)" />
+      <rect x="8" y="6" width="18" height="5" rx="2.5" fill="url(#forge-grad)" />
+      <rect x="8" y="16" width="14" height="4.5" rx="2" fill="url(#forge-grad)" opacity="0.9" />
 
-      {/* Inner highlight — gives depth */}
-      <path
-        d="M18 7 C19.8 12 24 16.2 29 18 C24 19.8 19.8 24 18 29 C16.2 24 12 19.8 7 18 C12 16.2 16.2 12 18 7Z"
-        fill="rgba(255,255,255,0.18)"
-      />
-
-      {/* Center dot */}
-      <circle cx="18" cy="18" r="2.2" fill="white" opacity="0.95" />
+      {/* Spark dot — the "forge spark" */}
+      <circle cx="28" cy="8" r="3" fill="#ff9f3a" opacity="0.95" filter="url(#forge-glow)" />
     </svg>
   );
 }
 
-export function PolarisWordmark({ size = 28, showIcon = true, className = '' }) {
+export function ForgeWordmark({ size = 28, showIcon = true, className = '' }) {
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
       {showIcon && (
@@ -52,31 +45,31 @@ export function PolarisWordmark({ size = 28, showIcon = true, className = '' }) 
           style={{
             width: size,
             height: size,
-            background: 'linear-gradient(135deg, #1a8fff, #0a84ff)',
-            boxShadow: '0 0 14px rgba(10,132,255,0.45)',
+            background: 'linear-gradient(135deg, #1c1c1e, #2c2c2e)',
+            boxShadow: '0 0 14px rgba(249,115,22,0.35), inset 0 0 0 1px rgba(255,255,255,0.08)',
           }}
         >
-          <svg
-            width={size * 0.62}
-            height={size * 0.62}
-            viewBox="0 0 36 36"
-            fill="none"
-          >
-            <path
-              d="M18 2 C21 9 27 15 34 18 C27 21 21 27 18 34 C15 27 9 21 2 18 C9 15 15 9 18 2Z"
-              fill="white"
-              opacity="0.95"
-            />
-            <circle cx="18" cy="18" r="2.5" fill="#0a84ff" />
+          <svg width={size * 0.65} height={size * 0.65} viewBox="0 0 36 36" fill="none">
+            <rect x="8" y="6" width="5" height="24" rx="2.5" fill="url(#forge-wm-grad)" />
+            <rect x="8" y="6" width="18" height="5" rx="2.5" fill="url(#forge-wm-grad)" />
+            <rect x="8" y="16" width="14" height="4.5" rx="2" fill="url(#forge-wm-grad)" opacity="0.9" />
+            <circle cx="28" cy="8" r="3" fill="#ff9f3a" />
+            <defs>
+              <linearGradient id="forge-wm-grad" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#ff9f3a" />
+                <stop offset="100%" stopColor="#0a84ff" />
+              </linearGradient>
+            </defs>
           </svg>
         </div>
       )}
       <span
-        className="font-semibold tracking-tight"
-        style={{ fontSize: size * 0.5, letterSpacing: '-0.02em' }}
+        className="font-bold tracking-tight"
+        style={{ fontSize: size * 0.5, letterSpacing: '-0.03em', color: 'var(--c-text-1)' }}
       >
-        Polaris
+        Forge
       </span>
     </div>
   );
 }
+

@@ -1,13 +1,13 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Telescope, Bookmark, LayoutDashboard, User, Command, LogOut, Sun, Moon } from 'lucide-react';
+import { Telescope, Bookmark, LayoutDashboard, User, Command, LogOut, Moon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import { PolarisWordmark } from '../ui/Logo';
+import { ForgeWordmark } from '../ui/Logo';
 
 const NAV = [
-  { to: '/discovery', icon: Telescope,       label: 'Discovery'  },
-  { to: '/saved',     icon: Bookmark,        label: 'Saved'      },
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard'  },
+  { to: '/discovery', icon: Telescope,       label: 'Discovery' },
+  { to: '/saved',     icon: Bookmark,        label: 'Saved'     },
+  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
 ];
 
 export default function Sidebar({ onCommandPalette }) {
@@ -30,7 +30,7 @@ export default function Sidebar({ onCommandPalette }) {
       {/* Wordmark */}
       <div className="px-4 pt-5 pb-3">
         <NavLink to="/discovery" className="block">
-          <PolarisWordmark size={30} />
+          <ForgeWordmark size={30} />
         </NavLink>
       </div>
 
@@ -94,31 +94,33 @@ export default function Sidebar({ onCommandPalette }) {
       <div className="px-3 pb-5">
         <div className="divider mb-3" />
 
-        {/* Theme toggle */}
+        {/* ─── THEME TOGGLE (FIXED) ───────────────────────────────────────
+            Shows "Dark mode" as a feature label.
+            Switch is ON (blue, dot-right) when dark mode is ACTIVE.
+            Switch is OFF (gray, dot-left) when light mode is active.
+            This matches the standard pattern (like macOS System Preferences).
+        ─────────────────────────────────────────────────────────────── */}
         <button
           onClick={toggle}
           className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl mb-2 transition-all duration-150"
           style={{
             background: 'var(--c-fill-3)',
             border: '1px solid var(--glass-border)',
-            color: 'var(--c-text-3)',
           }}
           title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-          {isDark
-            ? <Sun size={14} className="text-apple-yellow" />
-            : <Moon size={14} className="text-apple-indigo" />
-          }
-          <span className="text-xs font-medium" style={{ color: 'var(--c-text-3)' }}>
-            {isDark ? 'Light mode' : 'Dark mode'}
+          <Moon size={14} style={{ color: isDark ? '#bf5af2' : 'var(--c-text-4)' }} />
+          <span className="text-xs font-medium flex-1 text-left" style={{ color: 'var(--c-text-3)' }}>
+            Dark mode
           </span>
+          {/* Toggle pill — ON when isDark=true */}
           <div
-            className="ml-auto w-8 h-4 rounded-full relative transition-all duration-300"
-            style={{ background: isDark ? 'var(--c-fill-2)' : '#0071e3' }}
+            className="w-8 h-4 rounded-full relative flex-shrink-0 transition-all duration-300"
+            style={{ background: isDark ? '#0a84ff' : 'var(--c-fill-2)' }}
           >
             <div
-              className="absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all duration-300"
-              style={{ left: isDark ? 2 : 18 }}
+              className="absolute top-0.5 w-3 h-3 rounded-full bg-white shadow-sm transition-all duration-300"
+              style={{ left: isDark ? 18 : 2 }}
             />
           </div>
         </button>
@@ -129,8 +131,8 @@ export default function Sidebar({ onCommandPalette }) {
             ? <img src={user.avatarUrl} alt="" className="w-7 h-7 rounded-full flex-shrink-0" />
             : (
               <div
-                className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 text-apple-blue"
-                style={{ background: 'rgba(10,132,255,0.15)' }}
+                className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                style={{ background: 'rgba(249,115,22,0.15)', color: '#f97316' }}
               >
                 {user?.username?.[0]?.toUpperCase() || 'U'}
               </div>
@@ -143,8 +145,10 @@ export default function Sidebar({ onCommandPalette }) {
           </div>
           <button
             onClick={() => { logout(); navigate('/'); }}
-            className="p-1 rounded-lg transition-colors hover:bg-apple-red/10"
+            className="p-1 rounded-lg transition-colors"
             style={{ color: 'var(--c-text-4)' }}
+            onMouseEnter={e => e.currentTarget.style.color = '#ff453a'}
+            onMouseLeave={e => e.currentTarget.style.color = 'var(--c-text-4)'}
             title="Sign out"
           >
             <LogOut size={13} />

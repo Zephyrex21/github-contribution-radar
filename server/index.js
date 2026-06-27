@@ -36,7 +36,7 @@ app.use('/api/dashboard', dashboardRoutes);
 
 app.get("/", (req,res)=>{
     res.json({
-        message:"Polaris Backend API is running 🚀"
+        message:"Forge Backend API is running 🚀"
     })
 })
 

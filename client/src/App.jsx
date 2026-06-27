@@ -14,8 +14,13 @@ import NotFound from './pages/NotFound';
 function ProtectedRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
   if (isLoading) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="w-1.5 h-1.5 rounded-full bg-apple-blue animate-bounce" style={{ animationDelay: '0ms' }} />
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--c-bg)' }}>
+      <div className="flex items-center gap-1.5">
+        {[0, 150, 300].map(d => (
+          <div key={d} className="w-1.5 h-1.5 rounded-full bg-apple-blue"
+            style={{ animation: `bounceDot 1.4s ease-in-out ${d}ms infinite` }} />
+        ))}
+      </div>
     </div>
   );
   return isAuthenticated ? children : <Navigate to="/" replace />;
@@ -25,11 +30,9 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
-      <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route path="/auth/callback" element={<AuthCallback />} /> {/* ← single, no duplicate */}
       <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
-      
-      <Route path="/auth/callback" element={<AuthCallback />} />
-      
+
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route path="/discovery" element={<Discovery />} />
         <Route path="/issue/:owner/:repo/:issueNumber" element={<IssueDetail />} />
