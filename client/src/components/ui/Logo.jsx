@@ -1,75 +1,80 @@
 /**
- * Forge Logo — stylized forge-spark mark
- * Exports: ForgeIcon, ForgeWordmark
+ * Upstream Logo — theme-aware, no SVG gradient ID conflicts
+ *
+ * Mark concept: an upward-pointing arrow rising through two horizontal
+ * "stream" lines — visualises "contributing upstream" literally.
+ * Clean, minimal, works at any size.
  */
+import { useTheme } from '../../context/ThemeContext';
 
-export function ForgeIcon({ size = 32, className = '' }) {
+function UpstreamMark({ size, lightBg = false }) {
+  const s   = size;
+  // Colours
+  const arrowColor  = lightBg ? '#0071e3' : '#0a84ff';
+  const streamColor = lightBg ? 'rgba(0,113,227,0.25)' : 'rgba(10,132,255,0.30)';
+  const tipColor    = lightBg ? '#30a8ff' : '#5ac8fa';
+
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 36 36"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      <defs>
-        <linearGradient id="forge-grad" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#ff9f3a" />
-          <stop offset="60%" stopColor="#f97316" />
-          <stop offset="100%" stopColor="#0a84ff" />
-        </linearGradient>
-        <filter id="forge-glow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="1.2" result="blur" />
-          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-        </filter>
-      </defs>
+    <svg width={s} height={s} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Bottom stream line */}
+      <rect x="6" y="26" width="24" height="3" rx="1.5" fill={streamColor} />
 
-      {/* Bold F lettermark, slightly stylized */}
-      <rect x="8" y="6" width="5" height="24" rx="2.5" fill="url(#forge-grad)" filter="url(#forge-glow)" />
-      <rect x="8" y="6" width="18" height="5" rx="2.5" fill="url(#forge-grad)" />
-      <rect x="8" y="16" width="14" height="4.5" rx="2" fill="url(#forge-grad)" opacity="0.9" />
+      {/* Middle stream line */}
+      <rect x="6" y="19" width="24" height="3" rx="1.5" fill={streamColor} />
 
-      {/* Spark dot — the "forge spark" */}
-      <circle cx="28" cy="8" r="3" fill="#ff9f3a" opacity="0.95" filter="url(#forge-glow)" />
+      {/* Upward arrow shaft */}
+      <rect x="16" y="7" width="4" height="15" rx="2" fill={arrowColor} />
+
+      {/* Arrow head — upward pointing chevron built from two rects rotated */}
+      <path
+        d="M18 4 L11.5 11.5 L13.6 13.6 L18 9.2 L22.4 13.6 L24.5 11.5 Z"
+        fill={tipColor}
+      />
     </svg>
   );
 }
 
-export function ForgeWordmark({ size = 28, showIcon = true, className = '' }) {
+export function UpstreamIcon({ size = 32, className = '' }) {
+  return (
+    <div className={className} style={{ width: size, height: size }}>
+      <UpstreamMark size={size} />
+    </div>
+  );
+}
+
+export function UpstreamWordmark({ size = 28, showIcon = true, className = '' }) {
+  const { isDark } = useTheme();
+
+  const containerStyle = isDark
+    ? {
+        background:  'linear-gradient(145deg, #0d1117, #161b22)',
+        boxShadow:   '0 0 16px rgba(10,132,255,0.25), inset 0 0 0 1px rgba(255,255,255,0.08)',
+      }
+    : {
+        background:  'linear-gradient(145deg, #e8f4ff, #dbeeff)',
+        boxShadow:   '0 2px 8px rgba(0,113,227,0.12), inset 0 0 0 1px rgba(0,113,227,0.12)',
+      };
+
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
       {showIcon && (
         <div
           className="rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{
-            width: size,
-            height: size,
-            background: 'linear-gradient(135deg, #1c1c1e, #2c2c2e)',
-            boxShadow: '0 0 14px rgba(249,115,22,0.35), inset 0 0 0 1px rgba(255,255,255,0.08)',
-          }}
+          style={{ width: size, height: size, ...containerStyle }}
         >
-          <svg width={size * 0.65} height={size * 0.65} viewBox="0 0 36 36" fill="none">
-            <rect x="8" y="6" width="5" height="24" rx="2.5" fill="url(#forge-wm-grad)" />
-            <rect x="8" y="6" width="18" height="5" rx="2.5" fill="url(#forge-wm-grad)" />
-            <rect x="8" y="16" width="14" height="4.5" rx="2" fill="url(#forge-wm-grad)" opacity="0.9" />
-            <circle cx="28" cy="8" r="3" fill="#ff9f3a" />
-            <defs>
-              <linearGradient id="forge-wm-grad" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#ff9f3a" />
-                <stop offset="100%" stopColor="#0a84ff" />
-              </linearGradient>
-            </defs>
-          </svg>
+          <UpstreamMark size={size * 0.72} lightBg={!isDark} />
         </div>
       )}
       <span
         className="font-bold tracking-tight"
-        style={{ fontSize: size * 0.5, letterSpacing: '-0.03em', color: 'var(--c-text-1)' }}
+        style={{
+          fontSize:      size * 0.5,
+          letterSpacing: '-0.025em',
+          color:         'var(--c-text-1)',
+        }}
       >
-        Forge
+        Upstream
       </span>
     </div>
   );
 }
-

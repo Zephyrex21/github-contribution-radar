@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Check, ChevronRight, ChevronLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { profileApi } from '../api/index';
-import { ForgeWordmark } from '../components/ui/Logo';
+import { UpstreamWordmark } from '../components/ui/Logo';
 
 const LANGUAGES  = ['JavaScript','TypeScript','Python','Go','Rust','Java','C++','Ruby','PHP','Swift','Kotlin','C#'];
 const FRAMEWORKS = ['React','Vue','Next.js','Angular','Django','FastAPI','Express','Spring','Flutter','NestJS'];
@@ -65,7 +65,7 @@ export default function Onboarding() {
       <div className="w-full max-w-lg">
         {/* Logo */}
         <div className="flex justify-center mb-10">
-          <ForgeWordmark size={32} />
+          <UpstreamWordmark size={32} />
         </div>
 
         {/* Step progress */}
@@ -199,7 +199,7 @@ export default function Onboarding() {
             disabled={!canNext || mutation.isPending}
             className="btn-primary flex-1 justify-center py-2.5"
           >
-            {mutation.isPending ? 'Setting up...' : step === STEPS.length - 1 ? 'Start with Forge' : 'Continue'}
+            {mutation.isPending ? 'Setting up...' : step === STEPS.length - 1 ? 'Start with Upstream' : 'Continue'}
             {!mutation.isPending && <ChevronRight size={14} />}
           </button>
         </div>

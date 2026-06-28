@@ -1,9 +1,10 @@
-# Forge — GitHub Contribution Intelligence Platform
+# Polaris — GitHub Contribution Intelligence Platform
 
-**Forge** is a GitHub contribution intelligence platform designed to help developers discover meaningful open-source opportunities and understand their GitHub activity.
+**Polaris** is a GitHub contribution intelligence platform designed to help developers discover meaningful open-source opportunities and understand their GitHub activity.
 
 Finding the right repositories, issues, and contribution opportunities can be overwhelming, Polaris simplifies this process by analyzing GitHub data and presenting personalized insights through an intuitive dashboard.
 
+Inspired by the North Star ⭐, Polaris helps developers navigate the open-source universe.
 
 ## Live Demo 
 https://github-contribution-radar.vercel.app
@@ -64,7 +65,7 @@ Open `http://localhost:5173`.
 ## Project structure
 
 ```
-Forge/
+oss-radar/
 ├── client/        # React frontend
 │   └── src/
 │       ├── api/           # Axios + query functions
@@ -103,4 +104,4 @@ Forge/
 ## Support
 
 If you like Polaris, consider giving the repository a ⭐
-It helps the project grow!.
+It helps the project grow!

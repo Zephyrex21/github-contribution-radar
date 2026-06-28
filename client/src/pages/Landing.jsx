@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Github, Telescope, BookmarkCheck, BarChart2, Zap, GitMerge, Search, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { ForgeWordmark } from '../components/ui/Logo';
+import { UpstreamWordmark } from '../components/ui/Logo';
 
 export default function Landing() {
   const { isAuthenticated, user } = useAuth();
@@ -31,7 +31,7 @@ export default function Landing() {
       <div className="relative max-w-5xl mx-auto px-6">
         {/* Nav */}
         <header className="flex items-center justify-between py-6">
-          <ForgeWordmark size={30} />
+          <UpstreamWordmark size={30} />
           <div className="flex items-center gap-2">
             <button
               onClick={toggle}
@@ -85,7 +85,7 @@ export default function Landing() {
           </h1>
 
           <p className="text-lg max-w-xl mx-auto mb-12 leading-relaxed" style={{ color: 'var(--c-text-2)' }}>
-            Forge discovers issues that match your exact stack, scores them by fit,
+            Upstream discovers issues that match your exact stack, scores them by fit,
             and tracks every opportunity from first look to merged PR.
           </p>
 
@@ -155,7 +155,7 @@ export default function Landing() {
             { icon: BarChart2,     color: 'text-apple-green',  bg: 'bg-apple-green/10',  title: 'Progress Dashboard', desc: 'Activity heatmap, streak counter, and status breakdown. See your contribution momentum clearly.' },
             { icon: Zap,           color: 'text-apple-orange', bg: 'bg-apple-orange/10', title: 'For You Feed',        desc: 'Personalized issue feed auto-generated from your language preferences. No manual searching.' },
             { icon: GitMerge,      color: 'text-apple-teal',   bg: 'bg-apple-teal/10',   title: 'Trending Now',        desc: 'Live trending repos with beginner-friendly issues, refreshed every session.' },
-            { icon: Search,        color: 'text-apple-pink',   bg: 'bg-apple-pink/10',   title: '⌘K Command Palette', desc: 'Navigate, search, and jump to any part of Forge instantly with the keyboard.' },
+            { icon: Search,        color: 'text-apple-pink',   bg: 'bg-apple-pink/10',   title: '⌘K Command Palette', desc: 'Navigate, search, and jump to any part of Upstream instantly with the keyboard.' },
           ].map(f => (
             <div
               key={f.title}
@@ -173,10 +173,10 @@ export default function Landing() {
         {/* Footer */}
         <div className="border-t pb-8 pt-6 text-center" style={{ borderColor: 'var(--c-sep)' }}>
           <div className="flex items-center justify-center gap-2 mb-2">
-            <ForgeWordmark size={22} />
+            <UpstreamWordmark size={22} />
           </div>
           <p className="text-xs" style={{ color: 'var(--c-text-4)' }}>
-            Build your open-source presence
+            Your guide to open source
           </p>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Telescope, Bookmark, LayoutDashboard, User, Command, LogOut, Moon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import { ForgeWordmark } from '../ui/Logo';
+import { UpstreamWordmark } from '../ui/Logo';
 
 const NAV = [
   { to: '/discovery', icon: Telescope,       label: 'Discovery' },
@@ -30,7 +30,7 @@ export default function Sidebar({ onCommandPalette }) {
       {/* Wordmark */}
       <div className="px-4 pt-5 pb-3">
         <NavLink to="/discovery" className="block">
-          <ForgeWordmark size={30} />
+          <UpstreamWordmark size={30} />
         </NavLink>
       </div>
 

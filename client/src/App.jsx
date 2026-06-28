@@ -1,15 +1,16 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
-import Layout from './components/layout/Layout';
-import Landing from './pages/Landing';
+import Layout      from './components/layout/Layout';
+import Landing     from './pages/Landing';
 import AuthCallback from './pages/AuthCallback';
-import Onboarding from './pages/Onboarding';
-import Discovery from './pages/Discovery';
+import Onboarding  from './pages/Onboarding';
+import Discovery   from './pages/Discovery';
 import IssueDetail from './pages/IssueDetail';
-import Dashboard from './pages/Dashboard';
-import SavedItems from './pages/SavedItems';
-import Profile from './pages/Profile';
-import NotFound from './pages/NotFound';
+import RepoIssues  from './pages/RepoIssues';
+import Dashboard   from './pages/Dashboard';
+import SavedItems  from './pages/SavedItems';
+import Profile     from './pages/Profile';
+import NotFound    from './pages/NotFound';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -17,8 +18,11 @@ function ProtectedRoute({ children }) {
     <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--c-bg)' }}>
       <div className="flex items-center gap-1.5">
         {[0, 150, 300].map(d => (
-          <div key={d} className="w-1.5 h-1.5 rounded-full bg-apple-blue"
-            style={{ animation: `bounceDot 1.4s ease-in-out ${d}ms infinite` }} />
+          <div
+            key={d}
+            className="w-1.5 h-1.5 rounded-full bg-apple-blue"
+            style={{ animation: `bounceDot 1.4s ease-in-out ${d}ms infinite` }}
+          />
         ))}
       </div>
     </div>
@@ -29,16 +33,21 @@ function ProtectedRoute({ children }) {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/auth/callback" element={<AuthCallback />} /> {/* ← single, no duplicate */}
+      {/* Public */}
+      <Route path="/"              element={<Landing />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
+
+      {/* Onboarding — protected but no layout */}
       <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
 
+      {/* Protected app */}
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-        <Route path="/discovery" element={<Discovery />} />
-        <Route path="/issue/:owner/:repo/:issueNumber" element={<IssueDetail />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/saved" element={<SavedItems />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/discovery"                          element={<Discovery />}  />
+        <Route path="/issue/:owner/:repo/:issueNumber"    element={<IssueDetail />} />
+        <Route path="/repo/:owner/:repo"                  element={<RepoIssues />}  />
+        <Route path="/dashboard"                          element={<Dashboard />}   />
+        <Route path="/saved"                              element={<SavedItems />}  />
+        <Route path="/profile"                            element={<Profile />}     />
       </Route>
 
       <Route path="*" element={<NotFound />} />
