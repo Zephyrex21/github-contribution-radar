@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Github, Check } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth }  from '../context/AuthContext';
 import { profileApi } from '../api/index';
 import { useToast } from '../context/ToastContext';
 import { PageHeader } from '../components/ui/index';
@@ -10,26 +10,46 @@ const LANGUAGES  = ['JavaScript','TypeScript','Python','Go','Rust','Java','C++',
 const FRAMEWORKS = ['React','Vue','Next.js','Angular','Django','FastAPI','Express','Spring','Laravel','Rails','Flutter','NestJS'];
 const INTERESTS  = ['Web','CLI Tools','Mobile','ML / AI','DevOps','Security','Documentation','Testing','Design Systems','Databases'];
 const DIFFICULTIES = [
-  { value: 'beginner',     label: 'Beginner',     desc: 'Good first issue, help wanted' },
-  { value: 'intermediate', label: 'Intermediate',  desc: 'Mid-complexity issues'          },
-  { value: 'advanced',     label: 'Advanced',      desc: 'Complex, expert-level work'     },
+  { value: 'beginner',     label: 'Beginner',     desc: 'Good first issue, help wanted'  },
+  { value: 'intermediate', label: 'Intermediate',  desc: 'Mid-complexity issues'           },
+  { value: 'advanced',     label: 'Advanced',      desc: 'Complex, expert-level work'      },
 ];
 
+// Bug fix: Pill used border-white/[0.07] bg-white/[0.03] which are invisible in light mode
+// Now uses CSS variable-based inline styles
 function Pill({ label, selected, onClick }) {
   return (
-    <button type="button" onClick={onClick}
-      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-150 ${
-        selected
-          ? 'border-apple-blue/50 bg-apple-blue/10 text-apple-blue'
-          : 'border-white/[0.07] bg-white/[0.03] text-ink-tertiary hover:border-white/[0.12] hover:text-ink-secondary'
-      }`}>
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-150"
+      style={{
+        background:  selected ? 'rgba(10,132,255,0.10)' : 'var(--c-fill-3)',
+        border:      `1px solid ${selected ? 'rgba(10,132,255,0.45)' : 'var(--glass-border)'}`,
+        color:       selected ? '#0a84ff' : 'var(--c-text-3)',
+      }}
+      onMouseEnter={e => {
+        if (!selected) {
+          e.currentTarget.style.borderColor = 'var(--c-sep)';
+          e.currentTarget.style.color = 'var(--c-text-1)';
+        }
+      }}
+      onMouseLeave={e => {
+        if (!selected) {
+          e.currentTarget.style.borderColor = 'var(--glass-border)';
+          e.currentTarget.style.color = 'var(--c-text-3)';
+        }
+      }}
+    >
       {selected && <Check size={10} />}
       {label}
     </button>
   );
 }
 
-function toggle(arr, val) { return arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val]; }
+function toggle(arr, val) {
+  return arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val];
+}
 
 export default function Profile() {
   const { user, updateUser } = useAuth();
@@ -45,7 +65,7 @@ export default function Profile() {
 
   const mutation = useMutation({
     mutationFn: profileApi.updatePreferences,
-    onSuccess: res => {
+    onSuccess:  res => {
       updateUser(res.data);
       qc.invalidateQueries({ queryKey: ['dashboard'] });
       qc.invalidateQueries({ queryKey: ['issues', 'foryou'] });
@@ -65,22 +85,34 @@ export default function Profile() {
         <div className="space-y-4">
           <div className="glass p-5">
             <div className="flex items-center gap-3 mb-5">
-              {user?.avatarUrl
-                ? <img src={user.avatarUrl} alt="" className="w-14 h-14 rounded-2xl" />
-                : <div className="w-14 h-14 rounded-2xl bg-apple-blue/20 flex items-center justify-center text-apple-blue text-xl font-bold">
-                    {user?.username?.[0]?.toUpperCase()}
-                  </div>
-              }
+              {user?.avatarUrl ? (
+                <img src={user.avatarUrl} alt="" className="w-14 h-14 rounded-2xl" />
+              ) : (
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-bold text-apple-blue"
+                  style={{ background: 'rgba(10,132,255,0.15)' }}
+                >
+                  {user?.username?.[0]?.toUpperCase()}
+                </div>
+              )}
               <div>
-                <p className="font-semibold text-ink-primary">{user?.username}</p>
-                <p className="text-ink-tertiary text-xs mt-0.5">{user?.email || 'No email'}</p>
+                <p className="font-semibold" style={{ color: 'var(--c-text-1)' }}>{user?.username}</p>
+                <p className="text-xs mt-0.5" style={{ color: 'var(--c-text-3)' }}>
+                  {user?.email || 'No email'}
+                </p>
               </div>
             </div>
 
-            {user?.bio && <p className="text-ink-secondary text-sm leading-relaxed mb-4">{user.bio}</p>}
+            {user?.bio && (
+              <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--c-text-2)' }}>{user.bio}</p>
+            )}
 
-            <a href={`https://github.com/${user?.username}`} target="_blank" rel="noopener noreferrer"
-              className="btn-secondary w-full justify-center text-xs">
+            <a
+              href={`https://github.com/${user?.username}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary w-full justify-center text-xs"
+            >
               <Github size={13} /> View GitHub Profile
             </a>
           </div>
@@ -95,13 +127,14 @@ export default function Profile() {
                 ))}
               </div>
             ) : (
-              <p className="text-ink-quaternary text-xs">No languages set yet</p>
+              <p className="text-xs" style={{ color: 'var(--c-text-4)' }}>No languages set yet</p>
             )}
           </div>
         </div>
 
         {/* Right — preferences form */}
         <div className="lg:col-span-2 space-y-5">
+
           {/* Languages */}
           <div className="glass p-5">
             <div className="flex items-center justify-between mb-4">
@@ -133,20 +166,38 @@ export default function Profile() {
           <div className="glass p-5">
             <p className="section-label mb-4">Experience level</p>
             <div className="grid grid-cols-3 gap-2">
-              {DIFFICULTIES.map(({ value, label, desc }) => (
-                <button key={value} type="button"
-                  onClick={() => set('difficultyPreference', value)}
-                  className={`p-3 rounded-xl text-left transition-all duration-150 border ${
-                    prefs.difficultyPreference === value
-                      ? 'border-apple-blue/50 bg-apple-blue/08'
-                      : 'border-white/[0.07] bg-white/[0.03] hover:border-white/[0.12]'
-                  }`}>
-                  <p className={`text-xs font-semibold mb-0.5 ${prefs.difficultyPreference === value ? 'text-apple-blue' : 'text-ink-secondary'}`}>
-                    {label}
-                  </p>
-                  <p className="text-[10px] text-ink-quaternary leading-snug">{desc}</p>
-                </button>
-              ))}
+              {DIFFICULTIES.map(({ value, label, desc }) => {
+                const isSelected = prefs.difficultyPreference === value;
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => set('difficultyPreference', value)}
+                    // Bug fix: border-white/[0.07] bg-white/[0.03] → CSS vars
+                    className="p-3 rounded-xl text-left transition-all duration-150"
+                    style={{
+                      background:   isSelected ? 'rgba(10,132,255,0.08)' : 'var(--c-fill-3)',
+                      border:       `1px solid ${isSelected ? 'rgba(10,132,255,0.40)' : 'var(--glass-border)'}`,
+                    }}
+                    onMouseEnter={e => {
+                      if (!isSelected) e.currentTarget.style.borderColor = 'var(--c-sep)';
+                    }}
+                    onMouseLeave={e => {
+                      if (!isSelected) e.currentTarget.style.borderColor = 'var(--glass-border)';
+                    }}
+                  >
+                    <p
+                      className="text-xs font-semibold mb-0.5"
+                      style={{ color: isSelected ? '#0a84ff' : 'var(--c-text-2)' }}
+                    >
+                      {label}
+                    </p>
+                    <p className="text-[10px] leading-snug" style={{ color: 'var(--c-text-4)' }}>
+                      {desc}
+                    </p>
+                  </button>
+                );
+              })}
             </div>
           </div>
 

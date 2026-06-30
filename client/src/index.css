@@ -394,3 +394,35 @@
 @keyframes toastOut  { from { opacity: 1; transform: translateX(0) scale(1) } to { opacity: 0; transform: translateX(100%) scale(0.9) } }
 @keyframes spin      { to { transform: rotate(360deg) } }
 @keyframes bounceDot { 0%,80%,100% { transform: translateY(0) } 40% { transform: translateY(-6px) } }
+
+/* ─────────────────────────────────────────
+   THEME-AWARE HOVER UTILITIES
+   Use these instead of hover:bg-white/[0.04] etc.
+   Those hardcoded Tailwind classes break in light mode.
+───────────────────────────────────────── */
+@layer utilities {
+  /* hover fills using CSS vars — theme-safe */
+  .hover-fill:hover   { background-color: var(--c-fill-3) !important; }
+  .hover-fill-2:hover { background-color: var(--c-fill-2) !important; }
+
+  /* theme-safe border using separator var */
+  .border-theme { border-color: var(--c-sep) !important; }
+}
+
+/* ─────────────────────────────────────────
+   MISSING KEYFRAMES
+───────────────────────────────────────── */
+
+/* Toast progress bar shrink — was referenced but never defined */
+@keyframes shrink {
+  from { width: 100%; }
+  to   { width: 0%;   }
+}
+
+/* Glass card theme transition — smooth switching */
+.glass, .glass-sm, .glass-strong {
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease !important;
+}

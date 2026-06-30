@@ -4,7 +4,6 @@
 
 Finding the right repositories, issues, and contribution opportunities can be overwhelming, Polaris simplifies this process by analyzing GitHub data and presenting personalized insights through an intuitive dashboard.
 
-
 ## Live Demo 
 https://github-contribution-radar.vercel.app
 
@@ -64,7 +63,7 @@ Open `http://localhost:5173`.
 ## Project structure
 
 ```
-upstream/
+oss-radar/
 ├── client/        # React frontend
 │   └── src/
 │       ├── api/           # Axios + query functions

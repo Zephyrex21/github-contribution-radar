@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bookmark, BookmarkCheck, ExternalLink, Eye } from 'lucide-react';
-import ScoreBadge       from './ScoreBadge';
+import ScoreBadge        from './ScoreBadge';
 import QuickPreviewModal from '../global/QuickPreviewModal';
 import { timeAgo, truncate, labelColors } from '../../utils/formatters';
 
@@ -17,7 +17,7 @@ export default function IssueCard({ issue, onSave }) {
   const [owner, repo] = (issue.repoFullName || '').split('/');
 
   function goToDetail(e) {
-    if (e.target.closest('[data-action]')) return; // let action buttons handle their own clicks
+    if (e.target.closest('[data-action]')) return;
     if (owner && repo && issue.number) navigate(`/issue/${owner}/${repo}/${issue.number}`);
     else window.open(issue.url, '_blank');
   }
@@ -31,27 +31,32 @@ export default function IssueCard({ issue, onSave }) {
     <>
       <article
         onClick={goToDetail}
-        className="glass group relative cursor-pointer transition-all duration-200 hover:bg-white/[0.07] hover:border-white/[0.12] hover:-translate-y-0.5"
-        style={{ borderColor: 'var(--glass-border)' }}
+        // Bug fixes:
+        // hover:bg-white/[0.07]    → hover-fill-2  (CSS-var-based, theme-safe)
+        // hover:border-white/[0.12] → removed      (.glass already handles border via var)
+        className="glass group relative cursor-pointer transition-all duration-200 hover-fill-2 hover:-translate-y-0.5"
       >
-        {/* Accent top line for strong matches */}
+        {/* Accent line for strong matches */}
         {issue.score >= 80 && (
-          <div className="absolute top-0 left-4 right-4 h-px rounded-full"
-            style={{ background: 'linear-gradient(to right, transparent, rgba(10,132,255,0.5), transparent)' }} />
+          <div
+            className="absolute top-0 left-4 right-4 h-px rounded-full"
+            style={{ background: 'linear-gradient(to right, transparent, rgba(10,132,255,0.5), transparent)' }}
+          />
         )}
 
         <div className="p-5">
-          {/* Top row: score + difficulty + actions */}
+          {/* Top row */}
           <div className="flex items-start justify-between gap-2 mb-3">
             <div className="flex flex-wrap items-center gap-1.5">
               <ScoreBadge score={issue.score} scoreBand={issue.scoreBand} />
               {issue.difficultyTag && (
-                <span className={`tag text-xs ${DIFF_COLORS[issue.difficultyTag] || 'bg-white/[0.06] text-ink-tertiary'}`}>
+                <span className={`tag text-xs ${DIFF_COLORS[issue.difficultyTag] || 'bg-fill-tertiary text-ink-tertiary'}`}>
                   {issue.difficultyTag}
                 </span>
               )}
             </div>
-            {/* Actions — visible on hover */}
+
+            {/* Actions — reveal on hover */}
             <div
               data-action=""
               className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -67,6 +72,7 @@ export default function IssueCard({ issue, onSave }) {
               >
                 <Eye size={14} />
               </button>
+
               <button
                 onClick={() => onSave?.(issue)}
                 className="p-1.5 rounded-lg transition-all"
@@ -80,6 +86,7 @@ export default function IssueCard({ issue, onSave }) {
               >
                 {issue.isSaved ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
               </button>
+
               <a
                 href={issue.url}
                 target="_blank"
@@ -97,7 +104,7 @@ export default function IssueCard({ issue, onSave }) {
 
           {/* Title */}
           <h3
-            className="font-semibold text-sm leading-snug mb-1.5 transition-colors"
+            className="font-semibold text-sm leading-snug mb-1.5 transition-colors group-hover:text-apple-blue"
             style={{ color: 'var(--c-text-1)' }}
           >
             {truncate(issue.title, 90)}
@@ -107,13 +114,15 @@ export default function IssueCard({ issue, onSave }) {
           <button
             data-action=""
             onClick={goToRepo}
-            className="text-xs font-mono mb-3 transition-colors text-left hover:underline"
+            className="text-xs font-mono mb-3 transition-colors text-left hover:underline block"
             style={{ color: 'var(--c-text-4)' }}
             onMouseEnter={e => e.currentTarget.style.color = 'var(--c-accent)'}
             onMouseLeave={e => e.currentTarget.style.color = 'var(--c-text-4)'}
           >
             {issue.repoFullName}
-            {issue.language && <span style={{ color: 'rgba(10,132,255,0.6)', marginLeft: 6 }}>· {issue.language}</span>}
+            {issue.language && (
+              <span style={{ color: 'rgba(10,132,255,0.6)', marginLeft: 6 }}>· {issue.language}</span>
+            )}
           </button>
 
           {/* Labels */}
@@ -123,7 +132,7 @@ export default function IssueCard({ issue, onSave }) {
                 <span key={l} className={`tag text-xs ${labelColors(l)}`}>{l}</span>
               ))}
               {issue.labels.length > 3 && (
-                <span className="tag text-xs" style={{ background: 'var(--c-fill-3)', color: 'var(--c-text-4)' }}>
+                <span className="tag text-xs bg-fill-tertiary text-ink-quaternary">
                   +{issue.labels.length - 3}
                 </span>
               )}

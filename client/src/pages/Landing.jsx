@@ -28,7 +28,8 @@ const ROWS = [
   { score: 62, title: 'Optimize hook dependency comparison performance', repo: 'vercel/swr',     lang: 'TypeScript', tag: 'Advanced', scoreColor: '#ff453a', tagColor: '#ff453a', tagBg: 'rgba(255,69,58,0.12)'   },
 ];
 
-function AnimatedPreview({ isDark }) {
+function AnimatedPreview() {
+  const { isDark } = useTheme();
   const [typedText,   setTypedText]   = useState('');
   const [phase,       setPhase]       = useState('idle');   // idle|typing|scanning|results|fading
   const [visibleRows, setVisibleRows] = useState(0);
@@ -385,15 +386,22 @@ export default function Landing() {
           </div>
 
           {/* Headline */}
+          {/*
+            Bug fix: this span previously used a JS isDark-ternary inline style
+            WITHOUT backgroundSize set. That combo triggers a Chromium quirk where
+            background-clip:text silently fails and paints a solid box instead of
+            clipping to glyphs — and because the box color came from the isDark
+            ternary, it visually flipped opposite on every theme toggle.
+            Fix: use the existing proven `.gradient-text` class, which reads
+            `--gradient-text` directly from the [data-theme] DOM attribute
+            (zero JS state dependency — same technique already working correctly
+            on Dashboard/Onboarding headers elsewhere in the app).
+          */}
           <h1 style={{ fontSize: 64, fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.05, marginBottom: 20 }}>
-            <span style={{
-              display: 'block',
-              background: isDark
-                ? 'linear-gradient(135deg, #ffffff 30%, rgba(255,255,255,0.65))'
-                : 'linear-gradient(135deg, #1d1d1f 30%, rgba(0,0,0,0.55))',
-              WebkitBackgroundClip: 'text', backgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}>
+            <span
+              className="gradient-text"
+              style={{ display: 'block', backgroundSize: '100% 100%' }}
+            >
               Find your next
             </span>
             <span style={{
@@ -475,7 +483,7 @@ export default function Landing() {
 
         {/* ── Animated preview box ── */}
         <div style={{ maxWidth: 680, margin: '0 auto 96px' }}>
-          <AnimatedPreview isDark={isDark} />
+          <AnimatedPreview />
         </div>
 
         {/* ── Features grid ── */}
