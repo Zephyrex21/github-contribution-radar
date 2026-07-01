@@ -4,8 +4,6 @@
 
 Finding the right repositories, issues, and contribution opportunities can be overwhelming, Polaris simplifies this process by analyzing GitHub data and presenting personalized insights through an intuitive dashboard.
 
-Inspired by the North Star ⭐, Polaris helps developers navigate the open-source universe.
-
 ## Live Demo 
 https://github-contribution-radar.vercel.app
 
