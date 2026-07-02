@@ -239,3 +239,73 @@ export async function getRepoDetail({ owner, repo, userToken }) {
     handleGitHubError(err);
   }
 }
+
+/**
+ * Verify whether a user has opened a PR that references a specific issue.
+ *
+ * Strategy:
+ *  1. Search GitHub for all PRs by this user in this repo (max 20, sorted by updated)
+ *  2. For each PR, check if the body or title references the issue number using
+ *     standard GitHub closing keywords: closes, fixes, resolves (and shorthands)
+ *  3. Return the first matching PR with its state (open / merged / closed)
+ *
+ * Why search-based instead of timeline-based:
+ *  The issues timeline API would be ideal but requires more API calls (one per issue
+ *  to fetch events, then filtering for cross-references). The search approach is one
+ *  call and sufficient for 99% of cases — contributors almost always write "closes #N"
+ *  or "fixes #N" in their PR body.
+ */
+export async function verifyUserPR({ owner, repo, issueNumber, username, userToken }) {
+  try {
+    // Search all PRs (open + closed) by this user in this specific repo
+    const query = `is:pr author:${username} repo:${owner}/${repo}`;
+
+    const { data } = await axios.get(`${GITHUB_API}/search/issues`, {
+      headers: getHeaders(userToken),
+      params:  { q: query, sort: 'updated', order: 'desc', per_page: 20 },
+    });
+
+    if (!data.items?.length) return { verified: false };
+
+    // Build list of reference patterns we recognise
+    // GitHub auto-links all of these as closing references
+    const ref = String(issueNumber);
+    const patterns = [
+      `closes #${ref}`,   `close #${ref}`,
+      `closes: #${ref}`,  `close: #${ref}`,
+      `fixed #${ref}`,    `fix #${ref}`,    `fixes #${ref}`,
+      `fixed: #${ref}`,   `fix: #${ref}`,   `fixes: #${ref}`,
+      `resolved #${ref}`, `resolve #${ref}`, `resolves #${ref}`,
+      `resolved: #${ref}`,`resolve: #${ref}`,`resolves: #${ref}`,
+      // Bare reference (e.g. "See #123") — less definitive but we include it
+      `#${ref}`,
+    ];
+
+    const match = data.items.find(pr => {
+      const body  = (pr.body  || '').toLowerCase();
+      const title = (pr.title || '').toLowerCase();
+      return patterns.some(p => body.includes(p) || title.includes(p));
+    });
+
+    if (!match) return { verified: false };
+
+    // GitHub's search API returns PRs with a pull_request.merged_at field
+    // when the PR has been merged — use that to distinguish merged from closed
+    const isMerged = !!match.pull_request?.merged_at;
+    const state    = isMerged ? 'merged' : match.state; // 'open' | 'closed' | 'merged'
+
+    return {
+      verified: true,
+      prUrl:    match.html_url,
+      prTitle:  match.title,
+      prNumber: match.number,
+      prState:  state,
+    };
+  } catch (err) {
+    // Don't propagate — verification is optional; return unverified gracefully
+    if (err.response?.status === 403 || err.response?.status === 401) {
+      throw err; // Auth errors should surface
+    }
+    return { verified: false };
+  }
+}

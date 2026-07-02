@@ -222,11 +222,13 @@ export async function getIssueDetail(req, res, next) {
       success: true,
       data: {
         ...issueData.issue,
-        repo: issueData.repo,
+        repo:         issueData.repo,
         whatToDoNext: issueData.whatToDoNext,
-        isSaved: !!saved,
-        savedStatus: saved?.status || null,
-        savedItemId: saved?._id || null,
+        isSaved:      !!saved,
+        savedStatus:  saved?.status     || null,
+        savedItemId:  saved?._id        || null,
+        savedNote:    saved?.note       || '',
+        verifiedPR:   saved?.verifiedPR || null,
       },
     });
   } catch (err) {

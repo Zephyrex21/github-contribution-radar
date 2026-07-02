@@ -1,15 +1,19 @@
 import { ExternalLink, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import StatusSelector from './StatusSelector';
-import NotesEditor    from './NotesEditor';
-import ScoreBadge     from '../discovery/ScoreBadge';
-import { timeAgo }    from '../../utils/formatters';
+import StatusSelector       from './StatusSelector';
+import NotesEditor          from './NotesEditor';
+import PRVerificationBadge  from './PRVerificationBadge';
+import ScoreBadge           from '../discovery/ScoreBadge';
+import { timeAgo }          from '../../utils/formatters';
 
 const DIFF = {
   Beginner: 'bg-apple-green/12 text-apple-green',
   Moderate: 'bg-apple-yellow/12 text-apple-yellow',
   Advanced: 'bg-apple-red/12 text-apple-red',
 };
+
+// Show the verify button for statuses where a PR is plausibly in play
+const PR_VERIFY_STATUSES = ['In Progress', 'PR Opened', 'Merged'];
 
 export default function SavedIssueCard({ item, onStatusChange, onNoteChange, onRemove }) {
   const navigate = useNavigate();
@@ -21,8 +25,9 @@ export default function SavedIssueCard({ item, onStatusChange, onNoteChange, onR
     else window.open(item.githubIssueUrl, '_blank');
   }
 
+  const showVerify = PR_VERIFY_STATUSES.includes(item.status);
+
   return (
-    // Bug fix: hover:bg-white/[0.06] → hover-fill (CSS-var-based)
     <div className="glass p-4 hover-fill transition-all duration-200">
 
       {/* Header */}
@@ -65,7 +70,7 @@ export default function SavedIssueCard({ item, onStatusChange, onNoteChange, onR
         {item.repoFullName}
       </p>
 
-      {/* Badges */}
+      {/* Score + difficulty badges */}
       <div className="flex flex-wrap items-center gap-1.5 mb-3">
         {item.score !== undefined && (
           <ScoreBadge
@@ -77,21 +82,41 @@ export default function SavedIssueCard({ item, onStatusChange, onNoteChange, onR
           />
         )}
         {item.difficultyTag && (
-          // Bug fix: fallback was bg-white/[0.06] → now bg-fill-tertiary
           <span className={`tag text-[10px] ${DIFF[item.difficultyTag] || 'bg-fill-tertiary text-ink-tertiary'}`}>
             {item.difficultyTag}
           </span>
         )}
       </div>
 
+      {/* Status + timestamp */}
       <div className="flex items-center gap-2 mb-3">
-        <StatusSelector value={item.status} onChange={s => onStatusChange(item._id, s)} />
+        <StatusSelector
+          value={item.status}
+          onChange={s => onStatusChange(item._id, s)}
+        />
         <span className="text-[10px] ml-auto" style={{ color: 'var(--c-text-4)' }}>
           Saved {timeAgo(item.savedAt)}
         </span>
       </div>
 
-      <NotesEditor itemId={item._id} initialNote={item.note} onSave={onNoteChange} />
+      {/* PR Verification — only shown for relevant statuses */}
+      {showVerify && (
+        <div className="mb-3">
+          <PRVerificationBadge
+            savedItemId={item._id}
+            verifiedPR={item.verifiedPR || null}
+            onVerified={newStatus => onStatusChange(item._id, newStatus)}
+            queryKeys={[['savedItems'], ['dashboard', 'summary']]}
+          />
+        </div>
+      )}
+
+      {/* Notes */}
+      <NotesEditor
+        itemId={item._id}
+        initialNote={item.note}
+        onSave={onNoteChange}
+      />
     </div>
   );
 }
