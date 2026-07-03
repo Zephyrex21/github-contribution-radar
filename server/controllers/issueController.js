@@ -235,3 +235,48 @@ export async function getIssueDetail(req, res, next) {
     next(err);
   }
 }
+
+// ─── AI Issue Summarizer ─────────────────────────────────────────────────────
+import { summarizeIssue } from '../services/geminiService.js';
+
+/**
+ * POST /api/issues/summarize
+ *
+ * Accepts issue metadata in the request body and returns an AI-generated
+ * summary from Gemini 1.5 Flash.
+ *
+ * Results are cached by a hash of the issue URL to avoid burning API quota
+ * on repeated requests for the same issue (30 min TTL).
+ */
+export async function summarizeIssueHandler(req, res, next) {
+  try {
+    const { title, bodyPreview, labels, repoFullName, language, issueUrl } = req.body;
+
+    if (!title) {
+      return res.status(400).json({ success: false, message: 'title is required' });
+    }
+
+    // Cache key — scoped to the specific issue URL so results are globally reusable
+    // across all users (the issue content is public GitHub data)
+    const cacheKey = `ai-summary:${issueUrl || title}`;
+    const cached   = cache.get(cacheKey);
+    if (cached) {
+      return res.json({ success: true, data: cached, fromCache: true });
+    }
+
+    const result = await summarizeIssue({
+      title,
+      bodyPreview,
+      labels,
+      repoFullName,
+      language,
+    });
+
+    // Cache for 30 minutes — issues don't change often and this saves API quota
+    cache.set(cacheKey, result, 1800);
+
+    res.json({ success: true, data: result });
+  } catch (err) {
+    next(err);
+  }
+}
