@@ -127,12 +127,17 @@ export async function verifyPR(req, res, next) {
     }
     const [, owner, repo, issueNumber] = urlMatch;
 
-    // Need the user's GitHub token (select: false on model, so must explicitly select)
-    const userDoc = await User.findById(req.user.userId).select('+githubAccessToken username');
-    if (!userDoc?.githubAccessToken) {
+    // Now uses the optional GitHub PAT the user added in Profile settings
+    // rather than OAuth token (since we switched to email/password auth)
+    const userDoc = await User.findById(req.user.userId).select('+githubToken githubUsername username');
+    
+    const effectiveUsername = userDoc?.githubUsername || userDoc?.username;
+    const effectiveToken    = userDoc?.githubToken    || process.env.GITHUB_API_TOKEN || '';
+
+    if (!effectiveUsername) {
       return res.status(400).json({
         success: false,
-        message: 'GitHub access token not available. Please sign in again.',
+        message: 'Add your GitHub username in Profile → GitHub Connection so we know which PRs to check.',
       });
     }
 
@@ -141,8 +146,8 @@ export async function verifyPR(req, res, next) {
       owner,
       repo,
       issueNumber,
-      username:  userDoc.username,
-      userToken: userDoc.githubAccessToken,
+      username:  effectiveUsername,
+      userToken: effectiveToken,
     });
 
     let statusChanged = false;
