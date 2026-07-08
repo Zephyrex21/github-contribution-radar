@@ -1,5 +1,7 @@
 import SavedItem from '../models/SavedItem.js';
-import Issue from '../models/Issue.js';
+import Issue    from '../models/Issue.js';
+import User     from '../models/User.js';
+import * as githubService from '../services/githubService.js';
 
 export async function saveItem(req, res, next) {
   try {
@@ -97,8 +99,6 @@ export async function removeSavedItem(req, res, next) {
 }
 
 // ─── PR Verification ────────────────────────────────────────────────────────
-import User from '../models/User.js';
-import * as githubService from '../services/githubService.js';
 
 /**
  * POST /api/saved-items/:id/verify-pr

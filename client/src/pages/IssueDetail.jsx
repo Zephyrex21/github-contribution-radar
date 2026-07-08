@@ -8,6 +8,7 @@ import ScoreBadge          from '../components/discovery/ScoreBadge';
 import StatusSelector      from '../components/tracking/StatusSelector';
 import NotesEditor         from '../components/tracking/NotesEditor';
 import PRVerificationBadge from '../components/tracking/PRVerificationBadge';
+import IssueSummaryPanel   from '../components/discovery/IssueSummaryPanel';
 import { ErrorMessage }    from '../components/ui/index';
 import { issuesApi, savedItemsApi } from '../api/index';
 import { useToast }        from '../context/ToastContext';
@@ -160,6 +161,12 @@ export default function IssueDetail() {
               </p>
             </div>
           )}
+
+          {/* ── AI Issue Summarizer ── */}
+          <IssueSummaryPanel
+            issue={issue}
+            repoFullName={issue.repo?.fullName}
+          />
 
           {issue.whatToDoNext?.length > 0 && (
             <div className="glass p-5">

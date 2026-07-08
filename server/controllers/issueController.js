@@ -84,7 +84,8 @@ export async function getForYou(req, res, next) {
     const preferences = userDoc?.preferences || {};
     const languages   = preferences.languages || [];
 
-    const cacheKey = `foryou:${languages.sort().join(',')}:${page}`;
+    // Fix: [...languages] spread before .sort() so user preferences array is not mutated in-place
+    const cacheKey = `foryou:${[...languages].sort().join(',')}:${page}`;
     const cached   = cache.get(cacheKey);
 
     let items;
@@ -195,13 +196,12 @@ export async function getIssueDetail(req, res, next) {
     const { owner, repo, issueNumber } = req.params;
     const cacheKey = `issue:detail:${owner}:${repo}:${issueNumber}`;
 
-    const [userToken, userDoc, savedItem] = await Promise.all([
+    // Fix: removed a useless SavedItem.findOne() that was here previously —
+    // it fired a real DB query only to return null immediately.
+    // The actual saved-item check is done below after we have the issue URL.
+    const [userToken, userDoc] = await Promise.all([
       getUserToken(req.user.userId),
       User.findById(req.user.userId),
-      SavedItem.findOne({ userId: req.user.userId }).then(async () => {
-        // will be fetched after we have the issue URL
-        return null;
-      }),
     ]);
 
     let issueData = cache.get(cacheKey);

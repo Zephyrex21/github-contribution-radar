@@ -25,8 +25,14 @@ export async function getSummary(req, res, next) {
     const thisWeek = allItems.filter(i => new Date(i.savedAt) >= weekAgo).length;
 
     const active = allItems.filter(i => ['Exploring','In Progress','PR Opened'].includes(i.status)).length;
-    const total  = allItems.length > 0
-      ? Math.round(((statusCounts.Merged) / allItems.length) * 100)
+
+    // Fix: was named 'total' but holds successRate — renamed for clarity.
+    // Fix: denominator was allItems.length (included 'Saved' items never acted on)
+    // which made the rate artificially low. Now uses only items that were
+    // actually attempted (everything except still-Saved items).
+    const attempted   = allItems.filter(i => i.status !== 'Saved').length;
+    const successRate = attempted > 0
+      ? Math.round((statusCounts.Merged / attempted) * 100)
       : 0;
 
     res.json({
@@ -36,7 +42,7 @@ export async function getSummary(req, res, next) {
         active,
         merged:            statusCounts.Merged,
         dropped:           statusCounts.Dropped,
-        successRate:       total,
+        successRate:       successRate,
         thisWeekSaved:     thisWeek,
         byStatus:          statusCounts,
         languageBreakdown,
