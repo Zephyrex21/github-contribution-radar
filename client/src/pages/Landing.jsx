@@ -310,7 +310,7 @@ export default function Landing() {
               {isDark ? <Sun size={16} /> : <Moon size={16} />}
             </button>
             <a
-              href={`${import.meta.env.VITE_API_BASE_URL}/auth/github`}
+              href={`${import.meta.env.VITE_API_BASE_URL}/auth/github?force_login=true`}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
                 padding: '7px 14px', borderRadius: 12, fontSize: 13, fontWeight: 500,
@@ -424,7 +424,7 @@ export default function Landing() {
           {/* CTA buttons */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 18 }}>
             <a
-              href={`${import.meta.env.VITE_API_BASE_URL}/auth/github`}
+              href={`${import.meta.env.VITE_API_BASE_URL}/auth/github?force_login=true`}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
                 padding: '13px 28px', borderRadius: 16, fontSize: 14, fontWeight: 600,
@@ -553,7 +553,7 @@ export default function Landing() {
             Join developers finding better issues, faster.
           </p>
           <a
-            href={`${import.meta.env.VITE_API_BASE_URL}/auth/github`}
+            href={`${import.meta.env.VITE_API_BASE_URL}/auth/github?force_login=true`}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               padding: '12px 28px', borderRadius: 14, fontSize: 14, fontWeight: 600,

@@ -163,10 +163,7 @@ export default function IssueDetail() {
           )}
 
           {/* ── AI Issue Summarizer ── */}
-          <IssueSummaryPanel
-            issue={issue}
-            repoFullName={issue.repo?.fullName}
-          />
+          <IssueSummaryPanel issue={issue} repoFullName={issue.repo?.fullName} />
 
           {issue.whatToDoNext?.length > 0 && (
             <div className="glass p-5">

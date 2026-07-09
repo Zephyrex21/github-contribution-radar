@@ -17,7 +17,7 @@ export default function NotFound() {
   }
 
   return (
-    <div className="min-h-screen bg-sys-bg flex flex-col items-center justify-center text-center px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center text-center px-4" style={{ backgroundColor: 'var(--c-bg)' }}>
       {/* Bug fix: text-white/[0.04] was invisible against a light background.
           Replaced with a theme-aware fill that stays subtle in both themes. */}
       <p
