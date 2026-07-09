@@ -1,6 +1,6 @@
-import SavedItem from '../models/SavedItem.js';
-import Issue    from '../models/Issue.js';
-import User     from '../models/User.js';
+import SavedItem     from '../models/SavedItem.js';
+import Issue         from '../models/Issue.js';
+import User          from '../models/User.js';
 import * as githubService from '../services/githubService.js';
 
 export async function saveItem(req, res, next) {

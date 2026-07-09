@@ -26,10 +26,9 @@ export async function getSummary(req, res, next) {
 
     const active = allItems.filter(i => ['Exploring','In Progress','PR Opened'].includes(i.status)).length;
 
-    // Fix: was named 'total' but holds successRate — renamed for clarity.
-    // Fix: denominator was allItems.length (included 'Saved' items never acted on)
-    // which made the rate artificially low. Now uses only items that were
-    // actually attempted (everything except still-Saved items).
+    // Fix: renamed 'total' → 'successRate' for clarity.
+    // Fix: denominator now only counts actually-attempted items (not still-Saved ones)
+    // so the rate is honest and not artificially low.
     const attempted   = allItems.filter(i => i.status !== 'Saved').length;
     const successRate = attempted > 0
       ? Math.round((statusCounts.Merged / attempted) * 100)

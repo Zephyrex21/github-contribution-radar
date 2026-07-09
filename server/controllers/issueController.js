@@ -1,4 +1,5 @@
-import { cache } from '../config/cache.js';
+import { cache }          from '../config/cache.js';
+import { summarizeIssue } from '../services/geminiService.js';
 import * as githubService from '../services/githubService.js';
 import { calculateScore } from '../services/scoringService.js';
 import { generateNextSteps } from '../utils/nextStepsGenerator.js';
@@ -84,7 +85,7 @@ export async function getForYou(req, res, next) {
     const preferences = userDoc?.preferences || {};
     const languages   = preferences.languages || [];
 
-    // Fix: [...languages] spread before .sort() so user preferences array is not mutated in-place
+    // Fix: spread first so user preferences array is not mutated in-place
     const cacheKey = `foryou:${[...languages].sort().join(',')}:${page}`;
     const cached   = cache.get(cacheKey);
 
@@ -196,9 +197,8 @@ export async function getIssueDetail(req, res, next) {
     const { owner, repo, issueNumber } = req.params;
     const cacheKey = `issue:detail:${owner}:${repo}:${issueNumber}`;
 
-    // Fix: removed a useless SavedItem.findOne() that was here previously —
-    // it fired a real DB query only to return null immediately.
-    // The actual saved-item check is done below after we have the issue URL.
+    // Fix: removed a useless SavedItem.findOne() that fired a real DB query just to return null.
+    // The actual saved-item lookup is done below after we have the issue URL.
     const [userToken, userDoc] = await Promise.all([
       getUserToken(req.user.userId),
       User.findById(req.user.userId),
@@ -237,7 +237,6 @@ export async function getIssueDetail(req, res, next) {
 }
 
 // ─── AI Issue Summarizer ─────────────────────────────────────────────────────
-import { summarizeIssue } from '../services/geminiService.js';
 
 /**
  * POST /api/issues/summarize
