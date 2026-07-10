@@ -48,7 +48,7 @@ function RootRoute() {
   if (isAuthenticated) {
     // Fully onboarded users land on their Dashboard (their "home").
     // Users mid-onboarding are sent to finish setup first.
-    return <Navigate to={user?.onboardingComplete ? '/dashboard' : '/onboarding'} replace />;
+    return <Navigate to={user?.onboardingComplete ? '/discovery' : '/onboarding'} replace />;
   }
 
   return <Landing />;

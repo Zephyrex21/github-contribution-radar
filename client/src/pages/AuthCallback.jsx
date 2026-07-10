@@ -25,7 +25,7 @@ export default function AuthCallback() {
     // Fully onboarded users land on Dashboard (consistent with RootRoute's
     // behaviour for anyone already logged in opening the app).
     login(token).then(fullUser => {
-      navigate(fullUser?.onboardingComplete ? '/dashboard' : '/onboarding', { replace: true });
+      navigate(fullUser?.onboardingComplete ? '/discovery' : '/onboarding', { replace: true });
     }).catch(() => {
       // Fallback: if /auth/me fails, go to onboarding (safe default)
       navigate('/onboarding', { replace: true });
